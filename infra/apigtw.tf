@@ -45,7 +45,7 @@ resource "aws_lambda_permission" "lambda_permission" {
   function_name = aws_lambda_function.lambda_authorizer.arn
   principal     = "apigateway.amazonaws.com"
 
-  source_arn = "arn:aws:execute-api:${var.aws_region}:${data.aws_account_id}:${aws_api_gateway_rest_api.api_gateway.id}/*/*"
+  source_arn = "arn:aws:execute-api:${var.aws_region}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.api_gateway.id}/*/*"
 }
 
 resource "aws_api_gateway_integration" "api_gateway_integration" {
