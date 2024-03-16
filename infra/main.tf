@@ -6,7 +6,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "ordering-systems3"
+    bucket = "ordering-systems32"
     key    = "lambda-authorizers/terraform.tfstate"
     region = "us-east-1"
   }
