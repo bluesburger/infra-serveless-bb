@@ -1,54 +1,35 @@
-name: Deploy to AWS
+name: Deploy AWS Resources
 
 on:
   push:
     branches:
-      - '*'
-
-env:
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-permissions:
-  pull-requests: write
+      - main
 
 jobs:
-  plan-prod:
-    name: 'Deploy Resources'
+  deploy:
     runs-on: ubuntu-latest
-    env:
-      TF_WORKING_DIR: '.'
-
-    defaults:
-      run:
-        shell: bash
-        working-directory: ${{ env.TF_WORKING_DIR }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 0.14.0
 
-      - name: Terraform fmt
-        id: fmt
-        run: terraform fmt -check
-        continue-on-error: true
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
 
-      - name: Terraform Init
-        id: init
-        run: terraform init
+    - name: Initialize Terraform
+      run: terraform init
 
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate -no-color
+    - name: Plan Terraform
+      run: terraform plan -out=tfplan
 
-      - name: Terraform Plan
-        id: plan
-        run: TF_LOG=DEBUG terraform plan -no-color
-        continue-on-error: true
-
-      - name: Terraform Apply
-        id: apply
-        run: terraform apply -auto-approve
+    - name: Apply Terraform
+      run: terraform apply -auto-approve tfplan
