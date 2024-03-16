@@ -2,7 +2,6 @@ resource "aws_lambda_function" "lambda_authorizer" {
   function_name    = var.function_name
   filename         = "../app"
   handler          = "authorizer_service.lambda_handler"
-  source_code_hash = filebase64sha256("../app")
   runtime          = "python3.11"
   role             = aws_iam_role.lambda_role.arn
   depends_on       = [aws_cognito_user_pool.my_user_pool]
