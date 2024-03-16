@@ -1,6 +1,6 @@
 resource "aws_lambda_function" "lambda_authorizer" {
   function_name = var.function_name
-  filename      = "../src/app.zip"
+  filename      = "../app"
   handler       = "lambda_function.lambda_handler"
   runtime       = "python3.11"
   role          = aws_iam_role.lambda_role.arn
