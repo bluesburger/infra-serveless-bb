@@ -32,8 +32,8 @@ jobs:
       run: terraform validate infra/
 
     - name: Plan Terraform
-      run: terraform plan infra/
+      run: terraform plan -out=tfplan infra/
 
     - name: Apply Terraform
-      run: terraform apply -auto-approve -chdir=infra/
+      run: terraform apply -auto-approve tfplan infra/
 
