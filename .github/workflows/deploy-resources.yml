@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout
       uses: actions/checkout@v2
 
     - name: Setup Terraform
@@ -26,10 +26,13 @@ jobs:
         aws-region: us-east-1
 
     - name: Initialize Terraform
-      run: terraform init
+      run: terraform init infra/
+
+    - name: Validate Terraform
+      run: terraform validate infra/
 
     - name: Plan Terraform
-      run: terraform plan -out=tfplan
+      run: terraform plan -out=tfplan infra/
 
     - name: Apply Terraform
-      run: terraform apply -auto-approve tfplan
+      run: terraform apply -auto-approve tfplan infra/
