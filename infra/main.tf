@@ -8,7 +8,7 @@ terraform {
   backend "s3" {
     bucket = "ordering-systems3"
     key    = "lambda-authorizers/terraform.tfstate"
-    região = var.aws_region
+    region = var.aws_region
   }
 }
 
