@@ -2,7 +2,7 @@ data "aws_caller_identity" "current" {}
 
 data "archive_file" "python_lambda_pre_signup_package" {
   type        = "zip"
-  source_file  = "${path.module}/../app/lambda_auto_confirm_user.py"
+  source_dir = "${path.module}/../app/signup/"
   output_path = "${path.module}/zip/lambda_auto_confirm_user.zip"
 }
 
