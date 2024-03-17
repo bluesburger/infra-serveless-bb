@@ -73,7 +73,7 @@ resource "aws_cloudwatch_log_group" "lambda_verify_logs" {
   retention_in_days = 1
 }
 
-resource "aws_cloudwatch_log_group_" "lambda_signup_logs" {
+resource "aws_cloudwatch_log_group" "lambda_signup_logs" {
   name              = "/aws/lambda/${var.lambda_name_signup}"
   retention_in_days = 1
 }
