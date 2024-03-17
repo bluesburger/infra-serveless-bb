@@ -22,12 +22,12 @@ resource "aws_cognito_user_pool_client" "my_user_pool_client" {
 resource "aws_iam_policy" "cognito-triggers" {
   name        = "cognito-triggers-policy"
   description = "Permite que o cognito trigge as lambdas"
-  policy = jsonencode({
+  policy      = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
       {
         "Effect" : "Allow",
-        "Action" : "lambda:InvokeFunction",
+        "Action" : "cognito-idp:*",
         "Resource" : "*",
         "Condition" : {
           "StringEquals" : {
