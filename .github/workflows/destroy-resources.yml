@@ -1,4 +1,4 @@
-name: Deploy AWS Resources
+name: Destroy AWS Resources
 
 on:
   workflow_dispatch:

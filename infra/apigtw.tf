@@ -50,9 +50,4 @@ resource "aws_api_gateway_method_settings" "example_method_settings" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
   stage_name  = "dev"
   method_path = join("/", aws_api_gateway_resource.api_gateway_resource.path_part, aws_api_gateway_method.cognito_api_gateway_method.http_method)
-
-  settings {
-    authorization_type = "COGNITO_USER_POOLS"
-    authorizer_id      = aws_api_gateway_authorizer.cognito_authorizer.id
-  }
 }
