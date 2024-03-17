@@ -2,7 +2,7 @@ resource "aws_api_gateway_rest_api" "api_gateway" {
   name        = "apigtw-ordering-system-blues-burger"
   description = "Api gateway do sistema de pedidos"
 
-  depends_on = [aws_lambda_function.lambda_pre_authentication]
+  depends_on = [aws_lambda_function.lambda_pre_authentication, aws_cognito_user_pool.my_user_pool]
 }
 
 resource "aws_api_gateway_resource" "api_gateway_resource" {
@@ -58,4 +58,28 @@ resource "aws_api_gateway_method_settings" "example_method_settings" {
     metrics_enabled    = true
     data_trace_enabled = true
   }
+
+  depends_on = [aws_api_gateway_stage.aws_apigtw_stage]
+}
+
+resource "aws_api_gateway_deployment" "example" {
+  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
+
+  triggers = {
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_resource.api_gateway_resource.id,
+      aws_api_gateway_method.cognito_api_gateway_method.id,
+      aws_api_gateway_integration.api_gateway_integration_cognito.id,
+    ]))
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_api_gateway_stage" "aws_apigtw_stage" {
+  deployment_id = aws_api_gateway_deployment.example.id
+  rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
+  stage_name    = "dev"
 }
