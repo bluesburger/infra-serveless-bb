@@ -19,7 +19,7 @@ resource "aws_api_gateway_authorizer" "cognito_authorizer" {
   provider_arns         = [aws_cognito_user_pool.my_user_pool.arn]
 }
 
-resource "aws_api_gateway_method" "cognito_api_gateway_method" {
+resource "aws_api_gateway_method" "api_gateway_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
   resource_id   = aws_api_gateway_resource.api_gateway_resource.id
   http_method   = "ANY"
@@ -27,10 +27,10 @@ resource "aws_api_gateway_method" "cognito_api_gateway_method" {
   authorizer_id = aws_api_gateway_authorizer.cognito_authorizer.id
 }
 
-resource "aws_api_gateway_method_response" "cognito_api_gateway_method_response" {
+resource "aws_api_gateway_method_response" "api_gateway_method_response" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
   resource_id = aws_api_gateway_resource.api_gateway_resource.id
-  http_method = aws_api_gateway_method.cognito_api_gateway_method.http_method
+  http_method = aws_api_gateway_method.api_gateway_method.http_method
   status_code = "200"
 
   response_models = {
@@ -38,20 +38,10 @@ resource "aws_api_gateway_method_response" "cognito_api_gateway_method_response"
   }
 }
 
-resource "aws_api_gateway_integration" "api_gateway_integration_cognito" {
-  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  resource_id = aws_api_gateway_resource.api_gateway_resource.id
-  http_method = aws_api_gateway_method.cognito_api_gateway_method.http_method
-
-  integration_http_method = "AWS"
-  type                    = "AWS_PROXY"
-  uri                     = local.uri_integration_apigtw_cognito
-}
-
 resource "aws_api_gateway_method_settings" "example_method_settings" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
   stage_name  = "dev"
-  method_path = "${aws_api_gateway_resource.api_gateway_resource.path_part}/${aws_api_gateway_method.cognito_api_gateway_method.http_method}"
+  method_path = "${aws_api_gateway_resource.api_gateway_resource.path_part}/${aws_api_gateway_method.api_gateway_method.http_method}"
 
    settings {
     logging_level      = "INFO"
@@ -68,8 +58,7 @@ resource "aws_api_gateway_deployment" "example" {
   triggers = {
     redeployment = sha1(jsonencode([
       aws_api_gateway_resource.api_gateway_resource.id,
-      aws_api_gateway_method.cognito_api_gateway_method.id,
-      aws_api_gateway_integration.api_gateway_integration_cognito.id,
+      aws_api_gateway_method.api_gateway_method.id,
     ]))
   }
 
