@@ -10,7 +10,7 @@ resource "aws_apigatewayv2_authorizer" "cognito_authorizer" {
   api_id          = aws_apigatewayv2_api.api_gateway.id
   name            = "cognito-authorizer"
   authorizer_type = "JWT"
-  identity_source = ["method.request.header.Authorization"]
+  identity_sources = ["method.request.header.Authorization"]
 
   jwt_configuration {
     issuer   = aws_cognito_user_pool.my_user_pool.endpoint
@@ -28,5 +28,4 @@ resource "aws_apigatewayv2_stage" "stage" {
   api_id      = aws_apigatewayv2_api.api_gateway.id
   name        = "dev"
   auto_deploy = true
-  stage_name  = "dev"
 }
