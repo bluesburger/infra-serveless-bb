@@ -19,10 +19,19 @@ resource "aws_api_gateway_authorizer" "cognito_authorizer" {
   provider_arns         = [aws_cognito_user_pool.my_user_pool.arn]
 }
 
-resource "aws_api_gateway_method" "api_gateway_method" {
+resource "aws_api_gateway_integration" "get_menu_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.api_gateway.id
+  resource_id             = aws_api_gateway_resource.api_gateway_resource.id
+  http_method             = "GET"
+  integration_http_method = "GET"
+  type                    = "AWS_PROXY"
+  uri                     = "https://www.google.com.br/"
+}
+
+resource "aws_api_gateway_method" "get_menu_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
   resource_id   = aws_api_gateway_resource.api_gateway_resource.id
-  http_method   = "ANY"
+  http_method   = "POST"
   authorization = "COGNITO_USER_POOLS"
   authorizer_id = aws_api_gateway_authorizer.cognito_authorizer.id
 }
@@ -30,7 +39,7 @@ resource "aws_api_gateway_method" "api_gateway_method" {
 resource "aws_api_gateway_method_response" "api_gateway_method_response" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
   resource_id = aws_api_gateway_resource.api_gateway_resource.id
-  http_method = aws_api_gateway_method.api_gateway_method.http_method
+  http_method = aws_api_gateway_method.get_menu_method.http_method
   status_code = "200"
 
   response_models = {
@@ -41,7 +50,7 @@ resource "aws_api_gateway_method_response" "api_gateway_method_response" {
 resource "aws_api_gateway_method_settings" "example_method_settings" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
   stage_name  = "dev"
-  method_path = "${aws_api_gateway_resource.api_gateway_resource.path_part}/${aws_api_gateway_method.api_gateway_method.http_method}"
+  method_path = "${aws_api_gateway_resource.api_gateway_resource.path_part}/${aws_api_gateway_method.get_menu_method.http_method}"
 
    settings {
     logging_level      = "INFO"
@@ -58,7 +67,8 @@ resource "aws_api_gateway_deployment" "example" {
   triggers = {
     redeployment = sha1(jsonencode([
       aws_api_gateway_resource.api_gateway_resource.id,
-      aws_api_gateway_method.api_gateway_method.id,
+      aws_api_gateway_method.get_menu_method.id,
+      aws_api_gateway_integration.get_menu_integration.id
     ]))
   }
 
