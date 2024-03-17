@@ -89,6 +89,13 @@ resource "aws_iam_role" "lambda_role" {
           "Service" : "lambda.amazonaws.com"
         },
         "Action" : "sts:AssumeRole"
+      },
+      {
+        Action    = "sts:AssumeRole"
+        Effect    = "Allow"
+        Principal = {
+          Service = "cognito-idp.amazonaws.com"
+        }
       }
     ]
   })
@@ -123,4 +130,13 @@ resource "aws_iam_policy_attachment" "cognito_policy_attachment" {
   name       = "cognito-policy-attachment"
   roles      = [aws_iam_role.lambda_role.name]
   policy_arn = aws_iam_policy.cognito-triggers.arn
+}
+
+# Permissão para Cognito invocar Função Lambda 1
+resource "aws_lambda_permission" "permissao_lambda_1" {
+  statement_id  = "AllowCognitoToInvokeLambda1"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.lambda_auto_confirm_user.arn
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = "arn:aws:cognito-idp:${var.aws_region}:${data.aws_caller_identity.current.account_id}:userpool/${aws_cognito_user_pool.my_user_pool.id}"
 }
