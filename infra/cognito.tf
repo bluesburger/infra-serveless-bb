@@ -24,7 +24,7 @@ resource "aws_iam_policy" "cognito-triggers" {
     "Version" : "2012-10-17",
     "Statement" : [
       {
-        "Sid" : "lambda-allow-cognito",
+        "Sid" : "lambdaAllowCognito",
         "Effect" : "Allow",
         "Principal" : {
           "Service" : "cognito-idp.amazonaws.com"
