@@ -1,10 +1,14 @@
 import json
+from aws_lambda_powertools import Logger
+
+logger = Logger()
 
 
 BAD_REQUEST = 400
 
 
 def lambda_handler(event, context):
+    logger.info("Received event: " + json.dumps(event))
     if 'userName' not in event or 'request' not in event:
         return {
             'statusCode': BAD_REQUEST,
