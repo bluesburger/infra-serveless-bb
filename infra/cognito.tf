@@ -27,9 +27,6 @@ resource "aws_iam_policy" "cognito-triggers" {
     "Statement" : [
       {
         "Effect" : "Allow",
-        "Principal" : {
-          "Service" : "cognito-idp.amazonaws.com"
-        },
         "Action" : "lambda:InvokeFunction",
         "Resource" : "*",
         "Condition" : {
