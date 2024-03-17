@@ -22,7 +22,6 @@ resource "aws_cognito_user_pool_client" "my_user_pool_client" {
 resource "aws_iam_policy" "cognito-triggers" {
   policy = jsonencode({
     "Version" : "2012-10-17",
-    "Id" : "default",
     "Statement" : [
       {
         "Sid" : "lambda-allow-cognito",
