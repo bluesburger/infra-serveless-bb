@@ -15,7 +15,6 @@ resource "aws_api_gateway_authorizer" "cognito_authorizer" {
   rest_api_id           = aws_api_gateway_rest_api.api_gateway.id
   identity_source       = "method.request.header.Authorization"
   provider_arns         = [aws_cognito_user_pool.my_user_pool.arn]
-  authorizer_result_ttl = 300
 }
 
 resource "aws_api_gateway_method" "cognito_api_gateway_method" {
