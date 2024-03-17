@@ -9,6 +9,8 @@ resource "aws_api_gateway_resource" "api_gateway_resource" {
   parent_id   = aws_api_gateway_rest_api.api_gateway.root_resource_id
   path_part   = "{proxy+}"
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
+
+  depends_on = [aws_api_gateway_rest_api.api_gateway]
 }
 
 resource "aws_api_gateway_authorizer" "cognito_authorizer" {
@@ -17,6 +19,8 @@ resource "aws_api_gateway_authorizer" "cognito_authorizer" {
   rest_api_id           = aws_api_gateway_rest_api.api_gateway.id
   identity_source       = "method.request.header.Authorization"
   provider_arns         = [aws_cognito_user_pool.my_user_pool.arn]
+
+  depends_on = [aws_api_gateway_rest_api.api_gateway, aws_cognito_user_pool.my_user_pool]
 }
 
 resource "aws_api_gateway_integration" "get_menu_integration" {
@@ -26,6 +30,12 @@ resource "aws_api_gateway_integration" "get_menu_integration" {
   integration_http_method = "GET"
   type                    = "AWS_PROXY"
   uri                     = "https://www.google.com.br/"
+
+  depends_on = [
+    aws_api_gateway_rest_api.api_gateway,
+    aws_api_gateway_resource.api_gateway_resource,
+    aws_api_gateway_authorizer.cognito_authorizer
+  ]
 }
 
 resource "aws_api_gateway_method" "get_menu_method" {
@@ -34,6 +44,12 @@ resource "aws_api_gateway_method" "get_menu_method" {
   http_method   = "GET"
   authorization = "COGNITO_USER_POOLS"
   authorizer_id = aws_api_gateway_authorizer.cognito_authorizer.id
+
+  depends_on = [
+    aws_api_gateway_rest_api.api_gateway,
+    aws_api_gateway_resource.api_gateway_resource,
+    aws_api_gateway_authorizer.cognito_authorizer
+  ]
 }
 
 resource "aws_api_gateway_method_response" "api_gateway_method_response" {
@@ -45,6 +61,12 @@ resource "aws_api_gateway_method_response" "api_gateway_method_response" {
   response_models = {
     "application/json" = "Empty"
   }
+
+  depends_on = [
+    aws_api_gateway_rest_api.api_gateway,
+    aws_api_gateway_resource.api_gateway_resource,
+    aws_api_gateway_method.get_menu_method
+  ]
 }
 
 resource "aws_api_gateway_method_settings" "example_method_settings" {
@@ -52,7 +74,7 @@ resource "aws_api_gateway_method_settings" "example_method_settings" {
   stage_name  = "dev"
   method_path = "${aws_api_gateway_resource.api_gateway_resource.path_part}/${aws_api_gateway_method.get_menu_method.http_method}"
 
-   settings {
+  settings {
     logging_level      = "INFO"
     metrics_enabled    = true
     data_trace_enabled = true
@@ -75,10 +97,18 @@ resource "aws_api_gateway_deployment" "example" {
   lifecycle {
     create_before_destroy = true
   }
+
+  depends_on = [
+    aws_api_gateway_resource.api_gateway_resource,
+    aws_api_gateway_method.get_menu_method,
+    aws_api_gateway_integration.get_menu_integration
+  ]
 }
 
 resource "aws_api_gateway_stage" "aws_apigtw_stage" {
   deployment_id = aws_api_gateway_deployment.example.id
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
   stage_name    = "dev"
+
+  depends_on = [aws_api_gateway_deployment.example]
 }
