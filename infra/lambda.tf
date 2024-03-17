@@ -1,11 +1,10 @@
-resource "aws_lambda_function" "lambda_authorizer" {
+resource "aws_lambda_function" "lambda_pre_authentication" {
   function_name    = var.function_name
   filename         = data.archive_file.python_lambda_package.output_path
   source_code_hash = data.archive_file.python_lambda_package.output_base64sha256
   handler          = "lambda_pre_authentication_service.lambda_handler"
   runtime          = "python3.11"
   role             = aws_iam_role.lambda_role.arn
-  depends_on       = [aws_cognito_user_pool.my_user_pool]
   environment {
     variables = {
       user_pool_id = aws_cognito_user_pool.my_user_pool.id

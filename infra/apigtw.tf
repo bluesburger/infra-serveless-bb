@@ -1,6 +1,8 @@
 resource "aws_api_gateway_rest_api" "api_gateway" {
   name        = "apigtw-ordering-system-blues-burger"
   description = "Api gateway do sistema de pedidos"
+
+  depends_on = [aws_lambda_function.lambda_authorizer]
 }
 
 resource "aws_api_gateway_resource" "api_gateway_resource" {
