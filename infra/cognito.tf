@@ -8,8 +8,6 @@ resource "aws_cognito_user_pool" "my_user_pool" {
   schema {
     name                = "cpf"
     attribute_data_type = "String"
-    mutable             = true
-    required            = true
   }
 }
 
