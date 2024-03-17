@@ -13,13 +13,13 @@ resource "aws_apigatewayv2_authorizer" "cognito_authorizer" {
   identity_sources = ["method.request.header.Authorization"]
 
   jwt_configuration {
-    issuer   = aws_cognito_user_pool.my_user_pool.endpoint
+    issuer   = "https://${aws_cognito_user_pool.my_user_pool.endpoint}"
     audience = [aws_cognito_user_pool_client.my_user_pool_client.id]
   }
 }
 
 resource "aws_apigatewayv2_route" "route" {
-  api_id    = "sua-api-id"
+  api_id    = aws_apigatewayv2_api.api_gateway.id
   route_key = "ANY /{proxy+}"
   //TODO - colocar o target
 }
