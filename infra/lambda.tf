@@ -2,7 +2,7 @@ resource "aws_lambda_function" "lambda_authorizer" {
   function_name    = var.function_name
   filename         = data.archive_file.python_lambda_package.output_path
   source_code_hash = data.archive_file.python_lambda_package.output_base64sha256
-  handler          = "authorizer_service.lambda_handler"
+  handler          = "lambda_pre_authentication_service.lambda_handler"
   runtime          = "python3.11"
   role             = aws_iam_role.lambda_role.arn
   depends_on       = [aws_cognito_user_pool.my_user_pool]
@@ -15,7 +15,7 @@ resource "aws_lambda_function" "lambda_authorizer" {
 }
 
 resource "aws_iam_role" "lambda_role" {
-  name               = "lambda-authorizer-bb-role"
+  name               = "lambda-pre-authentication-bb-role"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [

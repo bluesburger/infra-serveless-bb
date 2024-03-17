@@ -6,8 +6,8 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "ordering-systems32"
-    key    = "lambda-authorizers/terraform.tfstate"
+    bucket = "odering-system-bb"
+    key    = "lambda-pre-authentication-cognito/terraform.tfstate"
     region = "us-east-1"
   }
 }
