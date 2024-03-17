@@ -45,7 +45,7 @@ resource "aws_api_gateway_integration" "api_gateway_integration_cognito" {
 
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = "https://example.com"
+  uri                     = "arn:aws:cognito-idp:us-east-1:696697120590:userpool/us-east-1_AYCUS3Gxj"
 }
 
 resource "aws_api_gateway_method_settings" "example_method_settings" {
