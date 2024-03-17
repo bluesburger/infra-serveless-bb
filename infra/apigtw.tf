@@ -10,7 +10,7 @@ resource "aws_apigatewayv2_authorizer" "cognito_authorizer" {
   api_id          = aws_apigatewayv2_api.api_gateway.id
   name            = "cognito-authorizer"
   authorizer_type = "JWT"
-  identity_sources = ["method.request.header.Authorization"]
+  identity_sources = ["$method.request.header.Authorization"]
 
   jwt_configuration {
     issuer   = "https://${aws_cognito_user_pool.my_user_pool.endpoint}"
