@@ -8,7 +8,7 @@ BAD_REQUEST = 400
 
 
 def lambda_handler(event, context):
-    logger.info("Received event: " + json.dumps(event))
+    logger.info("event received : " + json.dumps(event))
 
     if 'userName' not in event or 'request' not in event:
         return {
@@ -32,6 +32,7 @@ def lambda_handler(event, context):
 
     response['answerCorrect'] = False
 
+    logger.info("event response: " + json.dumps(event))
     return event
 
 
