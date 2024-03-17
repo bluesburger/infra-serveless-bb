@@ -122,5 +122,5 @@ resource "aws_iam_policy_attachment" "lambda_cloudwatch_logs_attachment" {
 resource "aws_iam_policy_attachment" "cognito_policy_attachment" {
   name       = "cognito-policy-attachment"
   roles      = [aws_iam_role.lambda_role.name]
-  policy_arn = aws_iam_policy.cognito-triggers
+  policy_arn = aws_iam_policy.cognito-triggers.arn
 }
