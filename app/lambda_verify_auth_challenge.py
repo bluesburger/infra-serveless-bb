@@ -9,6 +9,7 @@ BAD_REQUEST = 400
 
 def lambda_handler(event, context):
     logger.info("Received event: " + json.dumps(event))
+
     if 'userName' not in event or 'request' not in event:
         return {
             'statusCode': BAD_REQUEST,
@@ -16,6 +17,7 @@ def lambda_handler(event, context):
         }
 
     request = event['request']
+    response = event['response']
 
     if request['userAttributes'] and 'custom:cpf' in request['userAttributes']:
         cpf = request['userAttributes']['custom:cpf']
@@ -26,10 +28,9 @@ def lambda_handler(event, context):
                 'body': json.dumps('CPF inválido.')
             }
 
-        request['session'] = {
-            'challengeName': 'CUSTOM_CHALLENGE',
-            'challengeResult': True
-        }
+        response['answerCorrect'] = True
+
+    response['answerCorrect'] = False
 
     return event
 
