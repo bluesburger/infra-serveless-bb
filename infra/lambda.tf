@@ -58,22 +58,22 @@ resource "aws_lambda_function" "lambda_auto_confirm_user" {
   }
 }
 
-resource "aws_cloudwatch_log_group_lambda_create_auth_challenge" "lambda_logs" {
+resource "aws_cloudwatch_log_group" "lambda_create_logs" {
   name              = "/aws/lambda/${var.lambda_name_create}"
   retention_in_days = 1
 }
 
-resource "aws_cloudwatch_log_group_lambda_define_auth_challenge" "lambda_logs" {
+resource "aws_cloudwatch_log_group" "lambda_define_logs" {
   name              = "/aws/lambda/${var.lambda_name_define}"
   retention_in_days = 1
 }
 
-resource "aws_cloudwatch_log_group_lambda_verify_auth_challenge" "lambda_logs" {
+resource "aws_cloudwatch_log_group" "lambda_verify_logs" {
   name              = "/aws/lambda/${var.lambda_name_verify}"
   retention_in_days = 1
 }
 
-resource "aws_cloudwatch_log_group_lambda_auto_confirm_user" "lambda_logs" {
+resource "aws_cloudwatch_log_group_" "lambda_signup_logs" {
   name              = "/aws/lambda/${var.lambda_name_signup}"
   retention_in_days = 1
 }
