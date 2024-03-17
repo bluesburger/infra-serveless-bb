@@ -1,7 +1,7 @@
 resource "aws_lambda_function" "lambda_verify_auth_challenge" {
-  function_name    = var.function_name
-  filename         = data.archive_file.python_lambda_package.output_path
-  source_code_hash = data.archive_file.python_lambda_package.output_base64sha256
+  function_name    = var.lambda_name_verify
+  filename         = data.archive_file.python_lambda_verify_auth_package.output_path
+  source_code_hash = data.archive_file.python_lambda_verify_auth_package.output_base64sha256
   handler          = "lambda_verify_auth_challenge.lambda_handler"
   runtime          = "python3.11"
   role             = aws_iam_role.lambda_role.arn
@@ -14,9 +14,9 @@ resource "aws_lambda_function" "lambda_verify_auth_challenge" {
 }
 
 resource "aws_lambda_function" "lambda_create_auth_challenge" {
-  function_name    = var.function_name
-  filename         = data.archive_file.python_lambda_package.output_path
-  source_code_hash = data.archive_file.python_lambda_package.output_base64sha256
+  function_name    = var.lambda_name_create
+  filename         = data.archive_file.python_lambda_create_auth_package .output_path
+  source_code_hash = data.archive_file.python_lambda_create_auth_package.output_base64sha256
   handler          = "lambda_create_auth_challenge.lambda_handler"
   runtime          = "python3.11"
   role             = aws_iam_role.lambda_role.arn
@@ -29,9 +29,9 @@ resource "aws_lambda_function" "lambda_create_auth_challenge" {
 }
 
 resource "aws_lambda_function" "lambda_define_auth_challenge" {
-  function_name    = var.function_name
-  filename         = data.archive_file.python_lambda_package.output_path
-  source_code_hash = data.archive_file.python_lambda_package.output_base64sha256
+  function_name    = var.lambda_name_define
+  filename         = data.archive_file.python_lambda_define_auth_package.output_path
+  source_code_hash = data.archive_file.python_lambda_define_auth_package.output_base64sha256
   handler          = "lambda_define_auth_challenge.lambda_handler"
   runtime          = "python3.11"
   role             = aws_iam_role.lambda_role.arn
@@ -44,9 +44,9 @@ resource "aws_lambda_function" "lambda_define_auth_challenge" {
 }
 
 resource "aws_lambda_function" "lambda_auto_confirm_user" {
-  function_name    = var.function_name
-  filename         = data.archive_file.python_lambda_package.output_path
-  source_code_hash = data.archive_file.python_lambda_package.output_base64sha256
+  function_name    = var.lambda_name_signup
+  filename         = data.archive_file.python_lambda_pre_signup_package.output_path
+  source_code_hash = data.archive_file.python_lambda_pre_signup_package.output_base64sha256
   handler          = "lambda_auto_confirm_user.lambda_handler"
   runtime          = "python3.11"
   role             = aws_iam_role.lambda_role.arn
@@ -59,7 +59,22 @@ resource "aws_lambda_function" "lambda_auto_confirm_user" {
 }
 
 resource "aws_cloudwatch_log_group" "lambda_logs" {
-  name              = "/aws/lambda/${var.function_name}" #
+  name              = "/aws/lambda/${var.lambda_name_create}"
+  retention_in_days = 1
+}
+
+resource "aws_cloudwatch_log_group" "lambda_logs" {
+  name              = "/aws/lambda/${var.lambda_name_define}"
+  retention_in_days = 1
+}
+
+resource "aws_cloudwatch_log_group" "lambda_logs" {
+  name              = "/aws/lambda/${var.lambda_name_verify}"
+  retention_in_days = 1
+}
+
+resource "aws_cloudwatch_log_group" "lambda_logs" {
+  name              = "/aws/lambda/${var.lambda_name_signup}"
   retention_in_days = 1
 }
 
