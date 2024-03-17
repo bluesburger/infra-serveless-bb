@@ -19,3 +19,28 @@ resource "aws_cognito_user_pool_client" "my_user_pool_client" {
   user_pool_id = aws_cognito_user_pool.my_user_pool.id
 }
 
+resource "aws_iam_policy" "cognito-triggers" {
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Id" : "default",
+    "Statement" : [
+      {
+        "Sid" : "lambda-allow-cognito",
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "cognito-idp.amazonaws.com"
+        },
+        "Action" : "lambda:InvokeFunction",
+        "Resource" : "example_lambda_function_arn",
+        "Condition" : {
+          "StringEquals" : {
+            "AWS:SourceAccount" : data.aws_caller_identity.current.account_id
+          },
+          "ArnLike" : {
+            "AWS:SourceArn" : aws_cognito_user_pool.my_user_pool.arn
+          }
+        }
+      }
+    ]
+  })
+}
