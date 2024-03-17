@@ -1,4 +1,4 @@
-name: open-pr-to-main
+name: Open PR Develop to Main
 
 on:
   push:
