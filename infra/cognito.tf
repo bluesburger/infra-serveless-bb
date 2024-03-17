@@ -20,17 +20,18 @@ resource "aws_cognito_user_pool_client" "my_user_pool_client" {
 }
 
 resource "aws_iam_policy" "cognito-triggers" {
+  name        = "cognito-triggers-policy"
+  description = "Permite que o cognito trigge as lambdas"
   policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
       {
-        "Sid" : "lambdaAllowCognito",
         "Effect" : "Allow",
         "Principal" : {
           "Service" : "cognito-idp.amazonaws.com"
         },
         "Action" : "lambda:InvokeFunction",
-        "Resource" : "example_lambda_function_arn",
+        "Resource" : "*",
         "Condition" : {
           "StringEquals" : {
             "AWS:SourceAccount" : data.aws_caller_identity.current.account_id
