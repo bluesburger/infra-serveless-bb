@@ -4,8 +4,26 @@ variable "aws_region" {
   description = "regiao da conta aws"
 }
 
-variable "function_name" {
+variable "lambda_name_signup" {
   type        = string
-  default     = "lambda-pre-authentication-bb"
-  description = "nome da lambda de pre autenticacao do cognito autorizer"
+  default     = "lambda_auto_confirm_user"
+  description = "nome da lambda pre signup"
+}
+
+variable "lambda_name_define" {
+  type        = string
+  default     = "lambda_define_auth_challenge"
+  description = "nome da lambda pre define"
+}
+
+variable "lambda_name_create" {
+  type        = string
+  default     = "lambda_create_auth_challenge"
+  description = "nome da lambda pre create"
+}
+
+variable "lambda_name_verify" {
+  type        = string
+  default     = "lambda_verify_auth_challenge"
+  description = "nome da lambda pre verify"
 }

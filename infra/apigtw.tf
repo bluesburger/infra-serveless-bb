@@ -3,7 +3,7 @@ resource "aws_apigatewayv2_api" "api_gateway" {
   description   = "Api gateway do sistema de pedidos"
   protocol_type = "HTTP"
 
-  depends_on = [aws_lambda_function.lambda_pre_authentication, aws_cognito_user_pool.my_user_pool]
+  depends_on = [aws_cognito_user_pool.my_user_pool]
 }
 
 resource "aws_apigatewayv2_authorizer" "cognito_authorizer" {
