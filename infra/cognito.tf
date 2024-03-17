@@ -18,9 +18,3 @@ resource "aws_cognito_user_pool_client" "my_user_pool_client" {
   user_pool_id = aws_cognito_user_pool.my_user_pool.id
 }
 
-resource "aws_cognito_user_pool_trigger" "example_pre_authentication_trigger" {
-  user_pool_id = aws_cognito_user_pool.my_user_pool.id
-  trigger_name = "PreAuthentication"
-
-  lambda_function_name = local.lambda_pre_authentication_arn
-}
