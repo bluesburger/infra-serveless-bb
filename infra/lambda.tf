@@ -133,10 +133,37 @@ resource "aws_iam_policy_attachment" "cognito_policy_attachment" {
 }
 
 # Permissão para Cognito invocar Função Lambda 1
-resource "aws_lambda_permission" "permissao_lambda_1" {
+resource "aws_lambda_permission" "permissao_lambda_signup" {
   statement_id  = "AllowCognitoToInvokeLambda1"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda_auto_confirm_user.arn
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = "arn:aws:cognito-idp:${var.aws_region}:${data.aws_caller_identity.current.account_id}:userpool/${aws_cognito_user_pool.my_user_pool.id}"
+}
+
+# Permissão para Cognito invocar Função Lambda 2
+resource "aws_lambda_permission" "permissao_lambda_define" {
+  statement_id  = "AllowCognitoToInvokeLambda1"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.lambda_define_auth_challenge.arn
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = "arn:aws:cognito-idp:${var.aws_region}:${data.aws_caller_identity.current.account_id}:userpool/${aws_cognito_user_pool.my_user_pool.id}"
+}
+
+# Permissão para Cognito invocar Função Lambda 3
+resource "aws_lambda_permission" "permissao_lambda_create" {
+  statement_id  = "AllowCognitoToInvokeLambda1"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.lambda_create_auth_challenge.arn
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = "arn:aws:cognito-idp:${var.aws_region}:${data.aws_caller_identity.current.account_id}:userpool/${aws_cognito_user_pool.my_user_pool.id}"
+}
+
+# Permissão para Cognito invocar Função Lambda 4
+resource "aws_lambda_permission" "permissao_lambda_verify" {
+  statement_id  = "AllowCognitoToInvokeLambda1"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.lambda_verify_auth_challenge.arn
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = "arn:aws:cognito-idp:${var.aws_region}:${data.aws_caller_identity.current.account_id}:userpool/${aws_cognito_user_pool.my_user_pool.id}"
 }

@@ -1,15 +1,17 @@
 import json
+from aws_lambda_powertools import Logger
+
+logger = Logger()
 
 
 def lambda_handler(event, context):
-    # Extrair os parâmetros necessários do evento
-    response = event.get('response')
-    request = event.get('request')
+    logger.info('event received: ' + json.dumps(event))
 
-    # Lógica para definir o próximo desafio de autenticação
-    next_challenge = "CUSTOM_CHALLENGE"  # Defina o próximo tipo de desafio
-    issue_tokens = False  # Defina como True se todos os desafios foram concluídos
-    fail_authentication = False  # Defina como True se deseja encerrar a autenticação
+    response = event.get('response')
+
+    next_challenge = "CUSTOM_CHALLENGE"
+    issue_tokens = False
+    fail_authentication = False
 
     response.update = {
         "challengeName": next_challenge,
@@ -17,4 +19,5 @@ def lambda_handler(event, context):
         "failAuthentication": fail_authentication
     }
 
+    logger.info('event response: ' + json.dumps(event))
     return response
