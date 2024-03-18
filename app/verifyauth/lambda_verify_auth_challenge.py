@@ -17,7 +17,6 @@ def lambda_handler(event, context):
         }
 
     request = event['request']
-    response = event['response']
 
     if request['userAttributes'] and 'custom:cpf' in request['userAttributes']:
         cpf = request['userAttributes']['custom:cpf']
@@ -28,9 +27,11 @@ def lambda_handler(event, context):
                 'body': json.dumps('CPF inválido.')
             }
 
-        response['answerCorrect'] = True
+        event['response']['answerCorrect'] = True
+        logger.info("event response: " + json.dumps(event))
+        return event
 
-    response['answerCorrect'] = False
+    event['response']['answerCorrect'] = False
 
     logger.info("event response: " + json.dumps(event))
     return event
@@ -42,10 +43,12 @@ def validate_cpf(cpf):
 
     # Verifica se o CPF tem 11 dígitos
     if len(cpf) != 11:
+        logger.warning("cpf nao possui 11 digitos: " + cpf)
         return False
 
     # Verifica se todos os dígitos do CPF são iguais, o que o tornaria inválido
     if len(set(cpf)) == 1:
+        logger.warning("cpf invalido: " + cpf)
         return False
 
     # Calcula o primeiro dígito verificador
@@ -72,6 +75,8 @@ def validate_cpf(cpf):
 
     # Verifica se os dígitos verificadores calculados correspondem aos dígitos fornecidos
     if int(cpf[9]) == digito1 and int(cpf[10]) == digito2:
+        logger.info("cpf validado com sucesso : " + cpf)
         return True
     else:
+        logger.warning("cpf com digitos verificadores invalido: " + cpf)
         return False
