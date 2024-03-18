@@ -13,11 +13,17 @@ def lambda_handler(event, context):
     issue_tokens = False
     fail_authentication = False
 
-    response.update = {
-        "challengeName": next_challenge,
-        "issueTokens": issue_tokens,
-        "failAuthentication": fail_authentication
-    }
+    session = event['request']['session']
+
+    if (len(session) > 0 and session[-1]['challengeResult']):
+        event['response']['issueTokens'] = True
+        event['response']['failAuthentication'] = fail_authentication
+
+        return event
+
+    event['response']['challengeName'] = next_challenge
+    event['response']['issueTokens'] = issue_tokens
+    event['response']['failAuthentication'] = fail_authentication
 
     logger.info('event response: ' + json.dumps(event))
-    return response
+    return event
