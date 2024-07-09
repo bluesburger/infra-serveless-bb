@@ -6,7 +6,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "ordering-system-prod"
+    bucket = "bb-ordering-system-production"
     key    = "lambda-pre-authentication-cognito/terraform.tfstate"
     region = "us-east-1"
   }
