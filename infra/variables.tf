@@ -6,24 +6,24 @@ variable "aws_region" {
 
 variable "lambda_name_signup" {
   type        = string
-  default     = "lambda_auto_confirm_user"
+  default     = "faas-lambda-auto-confirm-user"
   description = "nome da lambda pre signup"
 }
 
 variable "lambda_name_define" {
   type        = string
-  default     = "lambda_define_auth_challenge"
+  default     = "faas-lambda-define-auth-challenge"
   description = "nome da lambda pre define"
 }
 
 variable "lambda_name_create" {
   type        = string
-  default     = "lambda_create_auth_challenge"
+  default     = "faas-lambda-create-auth-challenge"
   description = "nome da lambda pre create"
 }
 
 variable "lambda_name_verify" {
   type        = string
-  default     = "lambda_verify_auth_challenge"
+  default     = "faas-lambda-verify-auth-challenge"
   description = "nome da lambda pre verify"
 }
